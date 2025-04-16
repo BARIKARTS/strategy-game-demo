@@ -9,4 +9,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 	{
 		MouseUser.Init();
 	}
+
+	private void OnDisable()
+	{
+		MouseUser.Disponse();
+	}
 }

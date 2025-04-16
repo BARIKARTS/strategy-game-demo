@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameInput
@@ -22,6 +23,29 @@ namespace GameInput
 			private set => _instance = value;
 		}
 
+
+#if UNITY_EDITOR
+		[RuntimeInitializeOnLoadMethod]
+		private static void Initialize()
+		{
+			EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+		}
+
+		private static void OnPlayModeStateChanged(PlayModeStateChange state)
+		{
+			if (state == PlayModeStateChange.ExitingEditMode)
+			{
+				Clear();
+			}
+		}
+
+		private static void Clear()
+		{
+			_instance = null;
+			EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+
+		}
+#endif
 
 	}
 }
