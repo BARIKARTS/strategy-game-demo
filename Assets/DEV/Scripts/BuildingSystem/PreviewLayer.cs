@@ -44,7 +44,7 @@ namespace BuildingSystem
 
 			Collider2D hit = Physics2D.OverlapBox(boxCenter, boxSize, 10f);
 
-			if (hit != null) Debug.Log($"Tespit edilen nesne: {hit.gameObject.name}");
+			//if (hit != null) Debug.Log($"Tespit edilen nesne: {hit.gameObject.name}");
 			return hit == null;
 		}
 

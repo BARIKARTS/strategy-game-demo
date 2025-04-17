@@ -3,6 +3,7 @@ using UnityEngine;
 using BuildingSystem.Models;
 using UnityEngine.Tilemaps;
 using System.Collections;
+using Pathfinding;
 
 namespace BuildingSystem
 {
@@ -26,7 +27,8 @@ namespace BuildingSystem
 			//bool isEmpty = _constructionLayer.IsEmpty(newPreviewPos);
 			if (MouseUser.IsMouseButtonPressed(MouseButton.Left) && ActiveBuildable != null && _previewLayer.CanBuild)
 			{
-				Instantiate(ActiveBuildable.Prefab, mouseWorldPos, Quaternion.identity);
+				GameObject createObj = Instantiate(ActiveBuildable.Prefab, mouseWorldPos, Quaternion.identity);
+				AstarPathfindingManager.Instance.PlaceStructure(createObj);
 			}
 		}
 
