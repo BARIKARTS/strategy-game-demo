@@ -49,7 +49,7 @@
                     "name": "",
                     "id": "083ccc61-ebfa-4f87-94c1-d83c59cd296d",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "PlatformAction",

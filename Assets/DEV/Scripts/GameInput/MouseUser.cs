@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace GameInput
@@ -17,7 +16,10 @@ namespace GameInput
 
 		private static bool _isLeftMouseButtonPressed;
 		private static bool _isRightMouseButtonPressed;
-
+		public static Action OnLeftMouseDown = delegate { };
+		public static Action OnLeftMouseUp = delegate { };
+		public static Action OnRightMouseDown = delegate { };
+		public static Action OnRightMouseUp = delegate { };
 		public static void Init()
 		{
 			_mainCamera = Camera.main;
@@ -28,7 +30,7 @@ namespace GameInput
 			Unsubscribe();
 		}
 
-		
+
 		private static void Subscribe()
 		{
 			_inputActions.Game.MousePosition.performed += OnMousePositionPerformed;
@@ -52,22 +54,24 @@ namespace GameInput
 
 		private static void OnPerformActionPerformed(InputAction.CallbackContext context)
 		{
+			OnLeftMouseDown?.Invoke();
 			_isLeftMouseButtonPressed = true;
 		}
 		private static void OnPerformActionCanceled(InputAction.CallbackContext context)
 		{
-
+			OnLeftMouseUp?.Invoke();
 			_isLeftMouseButtonPressed = false;
 		}
 		private static void OnCancelActionPerformed(InputAction.CallbackContext context)
 		{
-
+			OnRightMouseDown?.Invoke();
 			_isRightMouseButtonPressed = true;
 		}
 
 		private static void OnCancelActionCanceled(InputAction.CallbackContext context)
 		{
 
+			OnRightMouseDown?.Invoke();
 			_isRightMouseButtonPressed = false;
 		}
 		private static void OnMousePositionPerformed(InputAction.CallbackContext context)
