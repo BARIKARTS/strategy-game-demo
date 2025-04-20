@@ -36,13 +36,13 @@ public class PowerPlantUIController : BasePanelController<PowerPlantData, BaseBu
 	public override void Subscribe()
 	{
 		HealtChange(_dynamicData.Healt);
-		_dynamicData.OnHealtChange += HealtChange;
+		_dynamicData._onHealtChange += HealtChange;
 
 	}
 
 	public override void Unsubscribe()
 	{
-		_dynamicData.OnHealtChange -= HealtChange;
+		_dynamicData._onHealtChange -= HealtChange;
 	}
 
 	private void HealtChange(float healt)

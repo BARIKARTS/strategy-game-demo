@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BarracksController : BuildingBaseController<BarracksData, BaseBuildingDynamicData>
 {
+	public override float Health => m_dynamicData.Healt;
 
 	public override void OnSelected()
 	{
@@ -13,7 +14,6 @@ public class BarracksController : BuildingBaseController<BarracksData, BaseBuild
 
 	public override void OnDeselected()
 	{
-		Debug.Log("dsa");
 		base.OnDeselected();
 	}
 
@@ -29,7 +29,7 @@ public class BarracksController : BuildingBaseController<BarracksData, BaseBuild
 	public override void TakeDamage(float damage)
 	{
 		m_dynamicData.Healt -= damage;
-		if (m_dynamicData.Healt < 0)
+		if (m_dynamicData.Healt <= 0)
 		{
 			Destroy();
 		}

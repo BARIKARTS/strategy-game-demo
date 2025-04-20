@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Pathfinding.Models
 {
+	/// <summary>
+	/// Grid container managing nodes, world-grid conversions and gizmo drawing.
+	/// </summary>
 	public class CustomGrid
 	{
 		public int Width { get; private set; }
@@ -19,27 +23,26 @@ namespace Pathfinding.Models
 			Origin = origin;
 			CellSize = cellSize;
 			nodes = new Node[width, height];
-			for (int x = 0; x < width; x++)
-			{
-				for (int y = 0; y < height; y++)
-				{
-					nodes[x, y] = new Node(x, y,true);
-				}
-			}
+			InitializeNodes();
 		}
 
-		public void UpdateGrid(int width, int height, Vector2 position, float cellSize)
+		public void UpdateGrid(int width, int height, Vector2 origin, float cellSize)
 		{
 			Width = width;
 			Height = height;
-			Origin = position;
+			Origin = origin;
 			CellSize = cellSize;
 			nodes = new Node[width, height];
-			for (int x = 0; x < width; x++)
+			InitializeNodes();
+		}
+
+		private void InitializeNodes()
+		{
+			for (int x = 0; x < Width; x++)
 			{
-				for (int y = 0; y < height; y++)
+				for (int y = 0; y < Height; y++)
 				{
-					nodes[x, y] = new Node(x, y,true);
+					nodes[x, y] = new Node(x, y, true);
 				}
 			}
 		}
@@ -53,7 +56,7 @@ namespace Pathfinding.Models
 
 		public void UpdateWalkability(int x, int y, bool isWalkable)
 		{
-			Node node = GetNode(x, y);
+			var node = GetNode(x, y);
 			if (node != null)
 			{
 				node.IsWalkable = isWalkable;
@@ -72,20 +75,54 @@ namespace Pathfinding.Models
 			int y = Mathf.FloorToInt((worldPosition.y - Origin.y) / CellSize);
 			return new Vector2Int(x, y);
 		}
+
 		public Vector2 GetCellCenter(int x, int y)
 		{
-			return GetWorldPosition(x, y) + new Vector2(CellSize / 2, CellSize / 2);
+			return GetWorldPosition(x, y) + new Vector2(CellSize * 0.5f, CellSize * 0.5f);
 		}
+
+#if UNITY_EDITOR
 		public void DrawGizmos()
 		{
 			for (int x = 0; x < Width; x++)
 			{
 				for (int y = 0; y < Height; y++)
 				{
-					Node node = nodes[x, y];
-					Vector2 position = GetWorldPosition(x, y) + new Vector2(CellSize / 2, CellSize / 2);
+					var node = nodes[x, y];
+					var pos = GetCellCenter(x, y);
 					Gizmos.color = node.IsWalkable ? Color.green : Color.red;
-					Gizmos.DrawWireCube(position, new Vector3(CellSize, CellSize, 0));
+					Gizmos.DrawWireCube(pos, new Vector3(CellSize, CellSize, 0f));
+				}
+			}
+		}
+#endif
+
+		public int GetManhattanDistance(Node a, Vector2Int b)
+		{
+			return Mathf.Abs(a.X - b.x) + Mathf.Abs(a.Y - b.y);
+		}
+
+		public int GetEuclideanDistance(Node a, Node b)
+		{
+			int dx = a.X - b.X;
+			int dy = a.Y - b.Y;
+			return (int)(Mathf.Sqrt(dx * dx + dy * dy) * 10);
+		}
+
+		/// <summary>
+		/// Retrieves adjacent neighbors (including diagonals).
+		/// </summary>
+		public void GetNeighbors(Node node, List<Node> neighbors)
+		{
+			neighbors.Clear();
+			for (int dx = -1; dx <= 1; dx++)
+			{
+				for (int dy = -1; dy <= 1; dy++)
+				{
+					if (dx == 0 && dy == 0) continue;
+					var n = GetNode(node.X + dx, node.Y + dy);
+					if (n != null)
+						neighbors.Add(n);
 				}
 			}
 		}

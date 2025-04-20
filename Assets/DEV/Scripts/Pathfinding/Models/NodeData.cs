@@ -1,5 +1,8 @@
 namespace Pathfinding.Models
 {
+	/// <summary>
+	/// Holds A* state for each node: costs, parent and visitation.
+	/// </summary>
 	public struct NodeData
 	{
 		public int GCost;

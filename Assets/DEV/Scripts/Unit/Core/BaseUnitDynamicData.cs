@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class BaseBuildingDynamicData
+public class BaseUnitDynamicData
 {
 	[SerializeField] private float _healt = 0;
 
@@ -15,7 +15,7 @@ public class BaseBuildingDynamicData
 		set
 		{
 			_healt = value;
-			OnHealtChange(_healt);
+			OnHealtChange?.Invoke(_healt);
 		}
 	}
 
