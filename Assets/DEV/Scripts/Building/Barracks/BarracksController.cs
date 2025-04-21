@@ -2,9 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BarracksController : BuildingBaseController<BarracksData, BaseBuildingDynamicData>
+public class BarracksController : BuildingBaseController<BarracksDynamicData>
 {
 	public override float Health => m_dynamicData.Healt;
+
+	[SerializeField] private Vector2 _testSpawnPos;
+
+	[ContextMenu("changeSpawnPos")]
+	private void ChangeSpawnPos()
+	{
+		m_dynamicData.UnitSpawnPosititon = _testSpawnPos;
+	}
 
 	public override void OnSelected()
 	{

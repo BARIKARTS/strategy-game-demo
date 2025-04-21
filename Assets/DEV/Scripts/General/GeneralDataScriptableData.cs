@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Building/BuildingData", fileName = "BuildingData")]
 public class GeneralDataScriptableData : ScriptableObject
 {
-	[SerializeField] private List<BaseBuildingScriptableObject> Buildings;
-
+	[SerializeField] private BaseBuildingScriptableObject[] Buildings;
+	[SerializeField] private BaseUnitScriptableObject[] Units;
 
 
 
@@ -16,11 +16,27 @@ public class GeneralDataScriptableData : ScriptableObject
 		buildingData = default;
 		if (Buildings == null)
 		{
-			Debug.LogError($"{Buildings} is null");
+			Debug.LogError($"{nameof(Buildings)} is null");
 			return false;
 		}
-		 buildingData = (T)Buildings.FirstOrDefault(b => b.BuildingType == buildingType).GetData();
+		buildingData = (T)Buildings.FirstOrDefault(b => b.BuildingType == buildingType).GetData();
 		Debug.Log(buildingData.Name);
+		return true;
+	}
+	public BaseBuildingData[] GetBuildingsData() => Buildings.Select(b => b.GetData()).ToArray();
+	#endregion
+
+	#region Units
+	public bool TryGetUnitData<T>(UnitType unitType, out T unitData) where T : BaseUnitData
+	{
+		unitData = default;
+		if (Units == null)
+		{
+			Debug.LogError($"{nameof(Units)} is null");
+			return false;
+		}
+		unitData = (T)Units.FirstOrDefault(b => b.UnitType == unitType).GetData();
+		Debug.Log(unitData.Name);
 		return true;
 	}
 	#endregion

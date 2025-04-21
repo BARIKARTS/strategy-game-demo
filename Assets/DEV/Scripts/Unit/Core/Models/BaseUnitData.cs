@@ -9,7 +9,7 @@ public class BaseUnitData
 	[field: SerializeField] public Sprite Icon { get; private set; }
 	[field: SerializeField] public GameObject Prefab { get; private set; }
 	[field: SerializeField] public UnitType UnitType { get; private set; }
-	[field: SerializeField] public BaseUnitDynamicData DynamicData = new BaseUnitDynamicData() { Healt=10};
+	[field: SerializeField] public BaseUnitDynamicData DynamicData;
 }
 
 

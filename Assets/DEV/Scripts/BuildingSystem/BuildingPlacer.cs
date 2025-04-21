@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace BuildingSystem
 {
-	public class BuildingPlacer : MonoBehaviour
+	public class BuildingPlacer : SingletonMonoBehaviour<BuildingPlacer>
 	{
 		[SerializeField] private Color _validPlacementColor;
 		[SerializeField] private Color _invalidPlacementColor;
@@ -14,17 +14,27 @@ namespace BuildingSystem
 		[SerializeField] private Tilemap _baseTileMap;
 		[SerializeField] private PreviewLayer _previewLayer;
 		private Coroutine _coroutine;
-
+		private BuildingType _currentType;
+		private CommonData _commonData => CommonData.Instance;
+		private FactoryManager _factoryManager => FactoryManager.Instance;
 		private void Start()
 		{
 			if (_previewLayer != null) _previewLayer.DeActivePreview();
 		}
-		public void Active()
+		public void Active(BuildingType buildingType)
 		{
 			if (_previewLayer == null || _baseTileMap == null) return;
 			if (_coroutine != null) StopCoroutine(_coroutine);
-			_previewLayer.ActivePreview(ActiveBuildable.PreviewSprite);
-			_coroutine = StartCoroutine(UpdateLayer_Coroutine());
+			if (_commonData.TryGetBuildingData(buildingType, out BaseBuildingData data))
+			{
+				_currentType = buildingType;
+				_previewLayer.ActivePreview(ActiveBuildable.PreviewSprite);
+				_coroutine = StartCoroutine(UpdateLayer_Coroutine());
+			}
+			else
+			{
+				Debug.LogError($"{buildingType} is null");
+			}
 
 		}
 
@@ -32,7 +42,7 @@ namespace BuildingSystem
 		{
 			if (_coroutine != null) StopCoroutine(_coroutine);
 			if (_previewLayer != null) _previewLayer.DeActivePreview();
-
+			_currentType = BuildingType.None;
 		}
 
 		private IEnumerator UpdateLayer_Coroutine()
@@ -46,15 +56,14 @@ namespace BuildingSystem
 				canBuild = CheckSurroundings();
 				previewColor = (canBuild ? _validPlacementColor : _invalidPlacementColor);
 				_previewLayer.UpdatePreview(mouseWorldPos, previewColor);
-				//Vector2 newPreviewPos = GetNewPreviewPosition(mouseWorldPos);
-				//bool isEmpty = _constructionLayer.IsEmpty(newPreviewPos);
 				if (MouseUser.IsMouseButtonPressed(MouseButton.Left) && ActiveBuildable != null && canBuild)
 				{
+					_factoryManager.BuildingSpawn(_currentType, mouseWorldPos);
 					Deactive();
-					GameObject createObj = Instantiate(ActiveBuildable.Prefab, mouseWorldPos, Quaternion.identity);
-					AstarPathfindingManager.Instance.PlaceStructure(createObj);
-					BarracksData barracksData = new BarracksData();
-					createObj.GetComponent<BarracksController>().Initialize(new BarracksData());
+					//GameObject createObj = Instantiate(ActiveBuildable.Prefab, mouseWorldPos, Quaternion.identity);
+					//AstarPathfindingManager.Instance.PlaceStructure(createObj);
+					//BarracksData barracksData = new BarracksData();
+					//createObj.GetComponent<BarracksController>().Initialize(new BarracksData());
 				}
 				yield return null;
 			}

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UnitProductionUIElemet : MonoBehaviour
+public class ProductionUIElemet : MonoBehaviour
 {
 	[SerializeField] private TextMeshProUGUI _nameTMP;
 	[SerializeField] private Image _iconImage;
@@ -15,7 +15,7 @@ public class UnitProductionUIElemet : MonoBehaviour
 	{
 		_nameTMP.text = name;
 		_iconImage.sprite = icon;
-		if (onClickAction != null) _button.onClick.AddListener(onClickAction);
+		if (_button != null && onClickAction != null) _button.onClick.AddListener(onClickAction);
 		gameObject.SetActive(true);
 	}
 	public void Hide()

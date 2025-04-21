@@ -3,7 +3,7 @@ using UnityEngine;
 public class MoveCommand : UnitCommand
 {
 	private bool _onComplate = false;
-	public MoveCommand(UnitController controller, Vector2 targetPosition) : base(controller)
+	public MoveCommand(StandartUnitController controller, Vector2 targetPosition) : base(controller)
 	{
 		//_moveSpeed = 5f;
 		controller.UnitPathfinding.GoMove(targetPosition, 5, 1f, Fnish);

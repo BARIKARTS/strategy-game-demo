@@ -1,8 +1,8 @@
 
 public abstract class UnitCommand
 {
-	protected UnitController m_controller;
-	public UnitCommand(UnitController controller)
+	protected StandartUnitController m_controller;
+	public UnitCommand(StandartUnitController controller)
 	{
 		m_controller = controller;
 	}

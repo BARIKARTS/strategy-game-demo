@@ -10,7 +10,8 @@ public class BaseBuildingData
 	[field: SerializeField] public Sprite PreviewSprite { get; private set; }
 	[field: SerializeField] public GameObject Prefab { get; private set; }
 	[field: SerializeField] public BuildingType BuildingType { get; private set; }
-	[field: SerializeField] public BaseBuildingDynamicData DynamicData { get; private set; }
+	
+
 }
 
 

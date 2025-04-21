@@ -20,7 +20,13 @@ public class BaseBuildingDynamicData
 		}
 	}
 
-	public event Action<float> _onHealtChange = delegate { };
-	public event Action _onDestroy = delegate { };
+	public event Action<float> _onHealtChange;
+	public event Action _onDestroy;
+	public BaseBuildingDynamicData(BaseBuildingDynamicData defaultData)
+	{
+		_healt = defaultData.Healt;
+		_onHealtChange = delegate { };
+		_onDestroy = delegate { };
+	}
 
 }

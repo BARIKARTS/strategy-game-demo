@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(UnitPathfinding))]
-public class UnitController : BaseUnitController<BaseUnitData, BaseUnitDynamicData>
+public class StandartUnitController : BaseUnitController<BaseUnitDynamicData>
 {
 
-	[SerializeField] private UnitController _testMove;
+	[SerializeField] private StandartUnitController _testMove;
 
 	protected override void Start()
 	{
 		base.Start();
-		Initialize(new BaseUnitData());
 	}
 
 	private void Update()
@@ -23,7 +22,7 @@ public class UnitController : BaseUnitController<BaseUnitData, BaseUnitDynamicDa
 	public void TestMove()
 	{
 		IDamageable damageable = _testMove;
-		UnitController obj = damageable as UnitController;
+		StandartUnitController obj = damageable as StandartUnitController;
 		Debug.Log(obj);
 		if (obj != null)
 		{

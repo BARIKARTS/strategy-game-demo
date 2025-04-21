@@ -7,7 +7,7 @@ public class AttackCommand : UnitCommand
 	private float attackCooldown;
 	private float lastAttackTime;
 
-	public AttackCommand(UnitController controller, IDamageable target) : base(controller)
+	public AttackCommand(StandartUnitController controller, IDamageable target) : base(controller)
 	{
 		this.target = target;
 		this.damage = 10;

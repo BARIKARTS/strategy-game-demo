@@ -1,9 +1,10 @@
 using UnityEngine;
 using Pathfinding;
 using System.Collections.Generic;
+using System;
 
 [RequireComponent(typeof(UnitPathfinding))]
-public abstract class BaseUnitController<T1, T2> : SelectableBase, IDamageable where T1 : BaseUnitData where T2 : BaseUnitDynamicData
+public abstract class BaseUnitController<T2> : SelectableBase, IDamageable where T2 : BaseUnitDynamicData
 {
 	public UnitType UnitType { get; private set; }
 	public float Health
@@ -38,11 +39,12 @@ public abstract class BaseUnitController<T1, T2> : SelectableBase, IDamageable w
 		commandQueue.Enqueue(command);
 	}
 	public Vector2 GetPosition() => transform.position;
-	public virtual void Initialize(T1 data)
+	public virtual void Initialize(UnitType unitType, BaseUnitDynamicData defaultData)
 	{
-		if (data == null) Debug.LogError($"data is null");
-		m_dynamicData = data.DynamicData as T2;
-		UnitType = data.UnitType;
+		if (defaultData == null) Debug.LogError($"data is null");
+		BaseUnitDynamicData data = (BaseUnitDynamicData)Activator.CreateInstance(typeof(T2), args: defaultData);
+		m_dynamicData = data as T2;
+		UnitType = unitType;
 
 	}
 

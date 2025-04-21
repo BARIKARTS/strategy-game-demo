@@ -44,29 +44,33 @@ namespace Pathfinding
 
 		public void PlaceStructure(GameObject structure)
 		{
-			Collider2D collider = structure.GetComponent<Collider2D>();
-			if (collider == null)
+
+			if (structure.TryGetComponent(out SpriteRenderer spriteRenderer))
 			{
-				Debug.LogError("Structure has no Collider2D component.");
-				return;
-			}
-
-			Bounds bounds = collider.bounds;
-			Vector2 minWorld = bounds.min;
-			Vector2 maxWorld = bounds.max;
-
-			int minGridX = WorldToGridX(minWorld.x);
-			int minGridY = WorldToGridY(minWorld.y);
-			int maxGridX = WorldToGridX(maxWorld.x);
-			int maxGridY = WorldToGridY(maxWorld.y);
-
-			for (int x = minGridX; x <= maxGridX; x++)
-			{
-				for (int y = minGridY; y <= maxGridY; y++)
+				if (spriteRenderer == null)
 				{
-					grid.UpdateWalkability(x, y, false);
+					Debug.LogError("Structure has no Collider2D component.");
+					return;
+				}
+
+				Bounds bounds = spriteRenderer.bounds;
+				Vector2 minWorld = bounds.min;
+				Vector2 maxWorld = bounds.max;
+
+				int minGridX = WorldToGridX(minWorld.x);
+				int minGridY = WorldToGridY(minWorld.y);
+				int maxGridX = WorldToGridX(maxWorld.x);
+				int maxGridY = WorldToGridY(maxWorld.y);
+
+				for (int x = minGridX; x <= maxGridX; x++)
+				{
+					for (int y = minGridY; y <= maxGridY; y++)
+					{
+						grid.UpdateWalkability(x, y, false);
+					}
 				}
 			}
+
 		}
 
 		private int WorldToGridX(float worldX)

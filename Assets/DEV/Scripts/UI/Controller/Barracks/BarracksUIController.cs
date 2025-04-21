@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class BarracksUIController : BasePanelController<BarracksData, BaseBuildingDynamicData>
+public class BarracksUIController : BasePanelController<BarracksData, BarracksDynamicData>
 {
 	[Header("REFERENCES")]
 	[SerializeField] private TextMeshProUGUI _name;
@@ -14,35 +14,37 @@ public class BarracksUIController : BasePanelController<BarracksData, BaseBuildi
 
 
 	[Space(2), Header("PRODUCTION REFERENCE")]
-	[SerializeField] private UnitProductionUIElemet _productionPrefab;
+	[SerializeField] private ProductionUIElemet _productionPrefab;
 	[SerializeField] private RectTransform _productionParent;
 
-	ObjectPool<UnitProductionUIElemet> _productionPool;
-	private List<UnitProductionUIElemet> _activeProduction = new List<UnitProductionUIElemet>();
-
-	public override void Active(BarracksData data, BaseBuildingDynamicData dynamicData)
+	ObjectPool<ProductionUIElemet> _productionPool;
+	private List<ProductionUIElemet> _activeProduction = new List<ProductionUIElemet>();
+	private CommonData _commonData => CommonData.Instance;
+	private FactoryManager _factoryManager => FactoryManager.Instance;
+	public override void Active(BarracksData data, BarracksDynamicData dynamicData)
 	{
 		CreatePool();
 		_name.text = data.Name;
 		_description.text = data.Description;
 		_previewIcon.sprite = data.Icon;
+		Debug.Log($"dynamic data: {dynamicData}");
 		_dynamicData = dynamicData;
-		//Subscribe();
+		Subscribe();
 		Debug.Log(data);
 		gameObject.SetActive(true);
-		CreateProductionElements(data.Units);
+		CreateProductionElements();
 	}
 	public override void Deactive()
 	{
 		gameObject.SetActive(false);
-		//Unsubscribe();
+		Unsubscribe();
 		HideProductionElements();
 	}
 
 	private void CreatePool()
 	{
 		if (_productionPool != null) return;
-		_productionPool = new ObjectPool<UnitProductionUIElemet>(_productionPrefab, 10, _productionParent);
+		_productionPool = new ObjectPool<ProductionUIElemet>(_productionPrefab, 10, _productionParent);
 	}
 
 	public override void Subscribe()
@@ -61,15 +63,29 @@ public class BarracksUIController : BasePanelController<BarracksData, BaseBuildi
 	{
 		_healtText.text = $"{healt}";
 	}
-	private void CreateProductionElements(GameObject[] units)
+	private void CreateProductionElements()
 	{
-		UnitProductionUIElemet currentElement;
-		for (byte i1 = 0; i1 < units.Length; ++i1)
+		if (_commonData != null && _commonData.TryGetBuildingData(BuildingType.Barracks, out BarracksData barracksData))
 		{
-			//CreatePructionElement();
-			currentElement = _productionPool.GetObject();
-			currentElement.Initialize("TEst", null, null);
-			_activeProduction.Add(currentElement);
+			ProductionUIElemet currentElement;
+			if (barracksData != null && barracksData.Units != null)
+			{
+				BaseUnitData currentData;
+				for (byte i1 = 0; i1 < barracksData.Units.Length; ++i1)
+				{
+					currentData = barracksData.Units[i1].GetData();
+					if (currentData == null) continue;
+					//CreatePructionElement();
+					currentElement = _productionPool.GetObject();
+					currentElement.Initialize(currentData.Name, currentData.Icon, () =>
+					{
+						Debug.Log("click kral");
+						_factoryManager?.UnitSpawn(currentData.UnitType, _dynamicData.UnitSpawnPosititon);
+					});
+					_activeProduction.Add(currentElement);
+				}
+
+			}
 		}
 	}
 	private void HideProductionElements()

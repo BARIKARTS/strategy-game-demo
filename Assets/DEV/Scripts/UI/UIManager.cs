@@ -40,14 +40,14 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
 	}
 
-	public void OpenBarracks(BuildingType buildingType, BaseBuildingDynamicData baseBuildingDynamicData)
+	public void OpenBarracks(BuildingType buildingType, BarracksDynamicData dynamicData)
 	{
 		HideControllers();
 		if (_commonData.TryGetBuildingData(buildingType, out BarracksData barracksData))
 		{
 			_endPanelHideAction.AddListener(_barracksUIController.Deactive);
 			Debug.LogWarning(barracksData.Name);
-			_barracksUIController?.Active(barracksData, baseBuildingDynamicData);
+			_barracksUIController?.Active(barracksData, dynamicData);
 		}
 	}
 
