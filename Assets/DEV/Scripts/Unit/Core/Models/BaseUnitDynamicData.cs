@@ -6,7 +6,7 @@ public class BaseUnitDynamicData
 {
 	[SerializeField] private float _healt;
 	[SerializeField] private float _damage;
-
+	[SerializeField] private float _attackCooldown;
 	public float Damage
 	{
 		get
@@ -16,7 +16,7 @@ public class BaseUnitDynamicData
 		set
 		{
 			_damage = value;
-			OnDamageCahnge?.Invoke(_damage);
+			DataChange();
 		}
 	}
 
@@ -29,22 +29,37 @@ public class BaseUnitDynamicData
 		set
 		{
 			_healt = value;
-			OnHealtChange?.Invoke(_healt);
+			DataChange();
 		}
 	}
 
-	public Action<float> OnHealtChange;
-	public Action<float> OnDamageCahnge;
+	public float AttackCooldown
+	{
+		get
+		{
+			return _attackCooldown;
+		}
+		set
+		{
+			_attackCooldown = value;
+			DataChange();
+		}
+	}
+	public Action OnDataChange;
 	public Action OnDestroy;
 
 	public BaseUnitDynamicData(BaseUnitDynamicData baseUnitDynamicData)
 	{
 		_healt = baseUnitDynamicData.Healt;
 		_damage = baseUnitDynamicData.Damage;
-		OnHealtChange = delegate { };
-		OnDamageCahnge = delegate { };
+		_attackCooldown = baseUnitDynamicData.AttackCooldown;
+		OnDataChange = delegate { };
 		OnDestroy = delegate { };
 
+	}
+	protected void DataChange()
+	{
+		OnDataChange?.Invoke();
 	}
 
 }

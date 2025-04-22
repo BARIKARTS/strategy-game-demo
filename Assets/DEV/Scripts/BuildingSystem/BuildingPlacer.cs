@@ -10,11 +10,12 @@ namespace BuildingSystem
 	{
 		[SerializeField] private Color _validPlacementColor;
 		[SerializeField] private Color _invalidPlacementColor;
-		[field: SerializeField] public BaseBuildingData ActiveBuildable { get; private set; }
 		[SerializeField] private Tilemap _baseTileMap;
 		[SerializeField] private PreviewLayer _previewLayer;
+
 		private Coroutine _coroutine;
 		private BuildingType _currentType;
+		private BaseBuildingData _activeBuildable;
 		private CommonData _commonData => CommonData.Instance;
 		private FactoryManager _factoryManager => FactoryManager.Instance;
 		private void Start()
@@ -27,8 +28,9 @@ namespace BuildingSystem
 			if (_coroutine != null) StopCoroutine(_coroutine);
 			if (_commonData.TryGetBuildingData(buildingType, out BaseBuildingData data))
 			{
+				_activeBuildable = data;
 				_currentType = buildingType;
-				_previewLayer.ActivePreview(ActiveBuildable.PreviewSprite);
+				_previewLayer.ActivePreview(_activeBuildable.PreviewSprite);
 				_coroutine = StartCoroutine(UpdateLayer_Coroutine());
 			}
 			else
@@ -56,7 +58,7 @@ namespace BuildingSystem
 				canBuild = CheckSurroundings();
 				previewColor = (canBuild ? _validPlacementColor : _invalidPlacementColor);
 				_previewLayer.UpdatePreview(mouseWorldPos, previewColor);
-				if (MouseUser.IsMouseButtonPressed(MouseButton.Left) && ActiveBuildable != null && canBuild)
+				if (MouseUser.IsMouseButtonPressed(MouseButton.Left) && _activeBuildable != null && canBuild)
 				{
 					_factoryManager.BuildingSpawn(_currentType, mouseWorldPos);
 					Deactive();
@@ -72,16 +74,15 @@ namespace BuildingSystem
 		public bool CheckSurroundings()
 		{
 
-			Vector2 spriteSize = ActiveBuildable.PreviewSprite.bounds.size;
+			Vector2 spriteSize = _activeBuildable.PreviewSprite.bounds.size;
 
 			Vector2 boxSize = spriteSize;
 
-			Vector2 boxCenter = _previewLayer.transform.position + ActiveBuildable.PreviewSprite.bounds.center;
-			Debug.Log(ActiveBuildable.PreviewSprite.bounds.center);
+			Vector2 boxCenter = _previewLayer.transform.position + _activeBuildable.PreviewSprite.bounds.center;
+			int layerToIgnore = LayerMask.NameToLayer("TileMap");
+			int mask = ~(1 << layerToIgnore);
+			Collider2D hit = Physics2D.OverlapBox(boxCenter, boxSize, 10f, mask);
 
-			Collider2D hit = Physics2D.OverlapBox(boxCenter, boxSize, 10f);
-
-			if (hit != null) Debug.Log($"Tespit edilen nesne: {hit.gameObject.name}");
 			return hit == null;
 		}
 

@@ -22,7 +22,6 @@ public class FactoryManager : SingletonMonoBehaviour<FactoryManager>
 	public void BuildingSpawn(BuildingType buildingType, Vector2 position)
 	{
 		GameObject building = _buildingSpawner.Spawn(buildingType, position);
-		Debug.Log(building.transform.position, building);
 		if (building != null) _pathfindingManager.PlaceStructure(building);
 	}
 

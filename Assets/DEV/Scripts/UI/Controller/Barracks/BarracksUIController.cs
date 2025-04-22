@@ -4,15 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class BarracksUIController : BasePanelController<BarracksData, BarracksDynamicData>
+public class BarracksUIController : BaseBuildUIController<BarracksData, BarracksDynamicData>
 {
-	[Header("REFERENCES")]
-	[SerializeField] private TextMeshProUGUI _name;
-	[SerializeField] private TextMeshProUGUI _description;
-	[SerializeField] private TextMeshProUGUI _healtText;
-	[SerializeField] private Image _previewIcon;
-
-
 	[Space(2), Header("PRODUCTION REFERENCE")]
 	[SerializeField] private ProductionUIElemet _productionPrefab;
 	[SerializeField] private RectTransform _productionParent;
@@ -21,23 +14,20 @@ public class BarracksUIController : BasePanelController<BarracksData, BarracksDy
 	private List<ProductionUIElemet> _activeProduction = new List<ProductionUIElemet>();
 	private CommonData _commonData => CommonData.Instance;
 	private FactoryManager _factoryManager => FactoryManager.Instance;
-	public override void Active(BarracksData data, BarracksDynamicData dynamicData)
+
+	private void Start()
 	{
 		CreatePool();
-		_name.text = data.Name;
-		_description.text = data.Description;
-		_previewIcon.sprite = data.Icon;
-		Debug.Log($"dynamic data: {dynamicData}");
-		_dynamicData = dynamicData;
-		Subscribe();
-		Debug.Log(data);
-		gameObject.SetActive(true);
+		gameObject.SetActive(false);
+	}
+	public override void Active(BarracksData data, BarracksDynamicData dynamicData)
+	{
+		base.Active(data, dynamicData);
 		CreateProductionElements();
 	}
 	public override void Deactive()
 	{
-		gameObject.SetActive(false);
-		Unsubscribe();
+		base.Deactive();
 		HideProductionElements();
 	}
 
@@ -47,22 +37,7 @@ public class BarracksUIController : BasePanelController<BarracksData, BarracksDy
 		_productionPool = new ObjectPool<ProductionUIElemet>(_productionPrefab, 10, _productionParent);
 	}
 
-	public override void Subscribe()
-	{
-		HealtChange(_dynamicData.Healt);
-		_dynamicData._onHealtChange += HealtChange;
 
-	}
-
-	public override void Unsubscribe()
-	{
-		_dynamicData._onHealtChange -= HealtChange;
-	}
-
-	private void HealtChange(float healt)
-	{
-		_healtText.text = $"{healt}";
-	}
 	private void CreateProductionElements()
 	{
 		if (_commonData != null && _commonData.TryGetBuildingData(BuildingType.Barracks, out BarracksData barracksData))
@@ -79,8 +54,7 @@ public class BarracksUIController : BasePanelController<BarracksData, BarracksDy
 					currentElement = _productionPool.GetObject();
 					currentElement.Initialize(currentData.Name, currentData.Icon, () =>
 					{
-						Debug.Log("click kral");
-						_factoryManager?.UnitSpawn(currentData.UnitType, _dynamicData.UnitSpawnPosititon);
+						_factoryManager?.UnitSpawn(currentData.UnitType, m_dynamicData.UnitSpawnPosititon);
 					});
 					_activeProduction.Add(currentElement);
 				}
@@ -96,7 +70,6 @@ public class BarracksUIController : BasePanelController<BarracksData, BarracksDy
 		}
 		_activeProduction.Clear();
 	}
-
 
 }
 

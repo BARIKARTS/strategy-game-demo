@@ -1,6 +1,7 @@
 using UnityEngine;
 using Pathfinding.Models;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 namespace Pathfinding
 {
@@ -13,6 +14,20 @@ namespace Pathfinding
 		[SerializeField] private float cellSize = 1f;
 
 		public CustomGrid grid;
+		private AstarPathfinding _astarPathfinding;
+
+		private void Start()
+		{
+			_astarPathfinding = new AstarPathfinding(grid);
+		}
+
+
+		public Queue<Vector2> FindPath(Vector2 start, Vector2 target)
+		{
+			if (_astarPathfinding == null) return null;
+			return _astarPathfinding.FindPath(start, target);
+		}
+
 
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -42,9 +57,17 @@ namespace Pathfinding
 		}
 #endif
 
+		public void DestroyStructure(GameObject structure)
+		{
+			UpdateGrids(structure, true);
+		}
 		public void PlaceStructure(GameObject structure)
 		{
+			UpdateGrids(structure, false);
+		}
 
+		private void UpdateGrids(GameObject structure, bool value)
+		{
 			if (structure.TryGetComponent(out SpriteRenderer spriteRenderer))
 			{
 				if (spriteRenderer == null)
@@ -66,12 +89,13 @@ namespace Pathfinding
 				{
 					for (int y = minGridY; y <= maxGridY; y++)
 					{
-						grid.UpdateWalkability(x, y, false);
+						grid.UpdateWalkability(x, y, value);
 					}
 				}
 			}
-
 		}
+
+
 
 		private int WorldToGridX(float worldX)
 		{

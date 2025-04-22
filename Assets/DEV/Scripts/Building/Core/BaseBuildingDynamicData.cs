@@ -15,18 +15,23 @@ public class BaseBuildingDynamicData
 		set
 		{
 			_healt = value;
-			if (_healt <= 0) _onDestroy?.Invoke();
-			_onHealtChange?.Invoke(_healt);
+			if (_healt <= 0) OnDestroy?.Invoke();
+			DataChange();
 		}
 	}
 
-	public event Action<float> _onHealtChange;
-	public event Action _onDestroy;
+	public event Action OnDataChange;
+	public event Action OnDestroy;
 	public BaseBuildingDynamicData(BaseBuildingDynamicData defaultData)
 	{
 		_healt = defaultData.Healt;
-		_onHealtChange = delegate { };
-		_onDestroy = delegate { };
+		OnDataChange = delegate { };
+		OnDestroy = delegate { };
+	}
+
+	protected void DataChange()
+	{
+		OnDataChange?.Invoke();
 	}
 
 }

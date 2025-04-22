@@ -8,5 +8,5 @@ public abstract class BaseBuildingSpawner
 
 	public abstract void Initialize(BaseBuildingData unitData);
 
-	public abstract GameObject Spawn(Vector2 position);
+	public abstract GameObject Spawn(Vector2 position, byte team);
 }

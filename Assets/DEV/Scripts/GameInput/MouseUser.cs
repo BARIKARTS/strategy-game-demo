@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 namespace GameInput
 {
@@ -14,12 +16,16 @@ namespace GameInput
 		public static Vector2 _mousePosition { get; private set; }
 		public static Vector2 MouseInWorldPosition => _mainCamera.ScreenToWorldPoint(_mousePosition);
 
-		private static bool _isLeftMouseButtonPressed;
-		private static bool _isRightMouseButtonPressed;
+		public static bool CanMousePointerUI => IsMousePointerOverUI();
 		public static Action OnLeftMouseDown = delegate { };
 		public static Action OnLeftMouseUp = delegate { };
 		public static Action OnRightMouseDown = delegate { };
 		public static Action OnRightMouseUp = delegate { };
+
+		private static bool _isLeftMouseButtonPressed;
+		private static bool _isRightMouseButtonPressed;
+
+
 		public static void Init()
 		{
 			_mainCamera = Camera.main;
@@ -29,8 +35,18 @@ namespace GameInput
 		{
 			Unsubscribe();
 		}
-
-
+		public static bool IsMouseButtonPressed(MouseButton mouseButton) => (mouseButton == MouseButton.Left ? _isLeftMouseButtonPressed : _isRightMouseButtonPressed);
+		private static bool IsMousePointerOverUI()
+		{
+			// Fare pozisyonunu al
+			PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+			{
+				position = _mousePosition
+			};
+			List<RaycastResult> results = new List<RaycastResult>();
+			EventSystem.current.RaycastAll(pointerEventData, results);
+			return results.Count > 0;
+		}
 		private static void Subscribe()
 		{
 			_inputActions.Game.MousePosition.performed += OnMousePositionPerformed;
@@ -39,7 +55,6 @@ namespace GameInput
 			_inputActions.Game.CancelAction.performed += OnCancelActionPerformed;
 			_inputActions.Game.CancelAction.canceled += OnCancelActionCanceled;
 		}
-
 		private static void Unsubscribe()
 		{
 
@@ -49,9 +64,6 @@ namespace GameInput
 			_inputActions.Game.CancelAction.performed -= OnCancelActionPerformed;
 			_inputActions.Game.CancelAction.canceled -= OnCancelActionCanceled;
 		}
-
-
-
 		private static void OnPerformActionPerformed(InputAction.CallbackContext context)
 		{
 			OnLeftMouseDown?.Invoke();
@@ -71,14 +83,13 @@ namespace GameInput
 		private static void OnCancelActionCanceled(InputAction.CallbackContext context)
 		{
 
-			OnRightMouseDown?.Invoke();
+			OnRightMouseUp?.Invoke();
 			_isRightMouseButtonPressed = false;
 		}
 		private static void OnMousePositionPerformed(InputAction.CallbackContext context)
 		{
 			_mousePosition = context.ReadValue<Vector2>();
 		}
-		public static bool IsMouseButtonPressed(MouseButton mouseButton) => (mouseButton == MouseButton.Left ? _isLeftMouseButtonPressed : _isRightMouseButtonPressed);
 
 	}
 }

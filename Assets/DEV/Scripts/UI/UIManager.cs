@@ -1,59 +1,66 @@
-using GameInput;
-using System;
 using UnityEngine;
-using UnityEngine.Events;
 
+/// <summary>
+/// A singleton manager for controlling UI panels in the game.
+/// Manages the activation and deactivation of barracks, unit, and power plant UI panels.
+/// </summary>
 public class UIManager : SingletonMonoBehaviour<UIManager>
 {
 	[SerializeField] private BarracksUIController _barracksUIController;
+	[SerializeField] private StandartUnitUIController _unitUIController;
 	[SerializeField] private PowerPlantUIController _powerPlantController;
 
-	private UnityEvent _endPanelHideAction = new UnityEvent();
 	private CommonData _commonData => CommonData.Instance;
 
-	private ISelectable _endSelectable;
-	private void OnEnable()
-	{
-		MouseUser.OnLeftMouseDown += OnMouseClick;
-	}
-	private void OnDisable()
-	{
-		MouseUser.OnLeftMouseDown -= OnMouseClick;
+	private BasePanelController _basePanelController;
 
-	}
-
-	private void OnMouseClick()
-	{
-		RaycastHit2D hit = Physics2D.Raycast(MouseUser.MouseInWorldPosition, Vector2.zero);
-		if (hit.collider != null)
-		{
-			Debug.Log("1");
-			if (hit.collider.TryGetComponent(out ISelectable selectable))
-			{
-				Debug.Log("2");
-				_endSelectable?.OnDeselected();
-				selectable.OnSelected();
-				_endSelectable = selectable;
-			}
-		}
-		Debug.Log("3");
-
-	}
-
+	/// <summary>
+	/// Opens the barracks UI panel for the specified building type with its dynamic data.
+	/// Hides the currently active panel, if any, before activating the barracks panel.
+	/// </summary>
+	/// <param name="buildingType">The type of the building to display in the UI.</param>
+	/// <param name="dynamicData">The dynamic data associated with the barracks.</param>
 	public void OpenBarracks(BuildingType buildingType, BarracksDynamicData dynamicData)
 	{
-		HideControllers();
+		HideController();
 		if (_commonData.TryGetBuildingData(buildingType, out BarracksData barracksData))
 		{
-			_endPanelHideAction.AddListener(_barracksUIController.Deactive);
-			Debug.LogWarning(barracksData.Name);
+			_basePanelController = _barracksUIController;
 			_barracksUIController?.Active(barracksData, dynamicData);
 		}
 	}
 
-	public void HideControllers()
+	/// <summary>
+	/// Opens the unit UI panel for the specified unit type with its dynamic data.
+	/// Hides the currently active panel, if any, before activating the unit panel.
+	/// </summary>
+	/// <param name="unitType">The type of the unit to display in the UI.</param>
+	/// <param name="dynamicData">The dynamic data associated with the unit.</param>
+	public void OpenUnitPanel(UnitType unitType, BaseUnitDynamicData dynamicData)
 	{
-		_endPanelHideAction?.Invoke();
-		_endPanelHideAction.RemoveAllListeners();
+		HideController();
+		if (_commonData.TryGetUnitData(unitType, out BaseUnitData baseUnitData))
+		{
+			_unitUIController?.Active(baseUnitData, dynamicData);
+			_basePanelController = _unitUIController;
+		}
+	}
+	/// <summary>
+	/// Deactivates the currently active UI panel, if any.
+	/// </summary>
+	
+	public void OpenPowerPlantPanel(BuildingType buildingType, BaseBuildingDynamicData dynamicData)
+	{
+		HideController();
+
+		if (_commonData.TryGetBuildingData(buildingType, out PowerPlantData powerPlantData))
+		{
+			_basePanelController = _barracksUIController;
+			_powerPlantController?.Active(powerPlantData, dynamicData);
+		}
+	}
+	public void HideController()
+	{
+		_basePanelController?.Deactive();
 	}
 }

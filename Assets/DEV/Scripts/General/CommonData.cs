@@ -5,7 +5,7 @@ using UnityEngine;
 public class CommonData : SingletonMonoBehaviour<CommonData>
 {
 	[SerializeField] private GeneralDataScriptableData _scripteableData;
-
+	[field: SerializeField] public byte Team { get; private set; }
 	public bool TryGetBuildingData<T>(BuildingType buildingType, out T baseBuildingData) where T : BaseBuildingData
 	{
 		bool status = _scripteableData.TryGetBuildingData(buildingType, out baseBuildingData);
@@ -28,7 +28,7 @@ public class CommonData : SingletonMonoBehaviour<CommonData>
 
 	public BaseUnitData[] GetBarracksUnitData(BuildingType buildingType)
 	{
-		if(TryGetBuildingData(buildingType, out BarracksData data))
+		if (TryGetBuildingData(buildingType, out BarracksData data))
 		{
 		}
 		return null;

@@ -1,3 +1,6 @@
+/// <summary>
+/// Manufactured units (such as soldiers)
+/// </summary>
 public enum UnitType
 {
 	Solider1 = 0,

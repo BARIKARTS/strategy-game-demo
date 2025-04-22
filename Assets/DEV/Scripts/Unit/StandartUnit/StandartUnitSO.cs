@@ -1,4 +1,8 @@
 using UnityEngine;
+/// <summary>
+/// A ScriptableObject representing a standard unit, storing its static data.
+/// Provides access to unit data and type for use in unit initialization.
+/// </summary>
 [CreateAssetMenu(menuName = "Units/New Standart Unit", fileName = "new StandartUnit")]
 public class StandartUnitSO : BaseUnitScriptableObject
 {

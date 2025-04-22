@@ -1,30 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class PowerPlantUIController : BasePanelController<PowerPlantData, BaseBuildingDynamicData>
+/// <summary>
+/// A UI controller for power plant buildings, managing the display of static and dynamic data.
+/// Inherits from BaseBuildUIController to provide specific functionality for power plants.
+/// </summary>
+public class PowerPlantUIController : BaseBuildUIController<PowerPlantData, BaseBuildingDynamicData>
 {
-	[Header("REFERENCES")]
-	[SerializeField] private TextMeshProUGUI _name;
-	[SerializeField] private TextMeshProUGUI _description;
-	[SerializeField] private TextMeshProUGUI _healtText;
-	[SerializeField] private Image _previewIcon;
 
-
-
-
-	public override void Active(PowerPlantData data, BaseBuildingDynamicData dynamicData)
+	private void Start()
 	{
-
-		_name.text = data.Name;
-		_description.text = data.Description;
-		_previewIcon.sprite = data.Icon;
-		_dynamicData = dynamicData;
-		Subscribe();
-		Debug.Log(_dynamicData);
-		gameObject.SetActive(true);
+		gameObject.SetActive(false);
 	}
 	public override void Deactive()
 	{
@@ -32,21 +15,12 @@ public class PowerPlantUIController : BasePanelController<PowerPlantData, BaseBu
 		Unsubscribe();
 	}
 
-
-	public override void Subscribe()
+	protected override void DynamicDataUpdate()
 	{
-		HealtChange(_dynamicData.Healt);
-		_dynamicData._onHealtChange += HealtChange;
-
+		if (m_dynamicData != null)
+		{
+			_healtText.text= $"{m_dynamicData.Healt}";
+		}
 	}
 
-	public override void Unsubscribe()
-	{
-		_dynamicData._onHealtChange -= HealtChange;
-	}
-
-	private void HealtChange(float healt)
-	{
-		_healtText.text = $"{healt}";
-	}
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BarracksSpawner : BaseBuildingSpawner
@@ -11,7 +9,7 @@ public class BarracksSpawner : BaseBuildingSpawner
 		_data = (BarracksData)unitData;
 	}
 
-	public override GameObject Spawn(Vector2 position)
+	public override GameObject Spawn(Vector2 position, byte team)
 	{
 		if (_data != null && _data.Prefab != null)
 		{
@@ -20,7 +18,7 @@ public class BarracksSpawner : BaseBuildingSpawner
 			if (createObj.TryGetComponent(out BarracksController barracksController))
 			{
 
-				barracksController.Initialize(_data.BuildingType, _data.DynamicData);
+				barracksController.Initialize(_data.BuildingType,team ,_data.DynamicData);
 			}
 			else
 			{

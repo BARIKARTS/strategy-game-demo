@@ -1,16 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BuildingSpawner 
+public class BuildingSpawner
 {
 	private List<BaseBuildingSpawner> _baseUnitSpawners = new List<BaseBuildingSpawner>();
 	private CommonData _commonData => CommonData.Instance;
 	private Dictionary<BuildingType, Type> _unitTypes => new Dictionary<BuildingType, Type>
 	{
-		{BuildingType.Barracks,typeof(BarracksSpawner) }
+		{BuildingType.Barracks,typeof(BarracksSpawner) },
+		{BuildingType.PowerPlant,typeof(PowerPlantSpawner) }
 	};
 
 	public BuildingSpawner()
@@ -27,13 +27,10 @@ public class BuildingSpawner
 	}
 	private void CreateSpawner(BuildingType unitType)
 	{
-		Debug.Log(1);
 		if (_unitTypes.TryGetValue(unitType, out Type type))
 		{
-		Debug.Log(5);
 			if (_commonData.TryGetBuildingData(unitType, out BaseBuildingData data))
 			{
-		Debug.Log(0	);
 				BaseBuildingSpawner spawner = (BaseBuildingSpawner)Activator.CreateInstance(type);
 				spawner.Initialize(data);
 				_baseUnitSpawners.Add(spawner);
@@ -43,10 +40,9 @@ public class BuildingSpawner
 	public GameObject Spawn(BuildingType buildingType, Vector2 position)
 	{
 		BaseBuildingSpawner spawner = _baseUnitSpawners.FirstOrDefault(s => s.BuildingType == buildingType);
-		Debug.Log(2);
 		if (spawner != null)
 		{
-			return spawner.Spawn(position);
+			return spawner.Spawn(position, _commonData.Team);
 		}
 		else
 		{

@@ -19,8 +19,7 @@ public class GeneralDataScriptableData : ScriptableObject
 			Debug.LogError($"{nameof(Buildings)} is null");
 			return false;
 		}
-		buildingData = (T)Buildings.FirstOrDefault(b => b.BuildingType == buildingType).GetData();
-		Debug.Log(buildingData.Name);
+		buildingData = (T)Buildings.FirstOrDefault(b => b?.BuildingType == buildingType).GetData();
 		return true;
 	}
 	public BaseBuildingData[] GetBuildingsData() => Buildings.Select(b => b.GetData()).ToArray();
@@ -36,7 +35,6 @@ public class GeneralDataScriptableData : ScriptableObject
 			return false;
 		}
 		unitData = (T)Units.FirstOrDefault(b => b.UnitType == unitType).GetData();
-		Debug.Log(unitData.Name);
 		return true;
 	}
 	#endregion
