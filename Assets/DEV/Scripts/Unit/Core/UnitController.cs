@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using DG.Tweening;
 
 /// <summary>
 /// An abstract base class for controlling units with generic dynamic data.
@@ -91,6 +92,7 @@ public abstract class UnitController<T2> : BaseUnitController where T2 : BaseUni
 	protected virtual void OnDestroy()
 	{
 		m_dynamicData?.OnDestroy?.Invoke();
+		transform.DOKill();
 	}
 
 

@@ -18,6 +18,7 @@ namespace Pathfinding
 
 		private void Start()
 		{
+			InitializeGrid();
 			_astarPathfinding = new AstarPathfinding(grid);
 		}
 
@@ -29,6 +30,10 @@ namespace Pathfinding
 		}
 
 
+		private void InitializeGrid()
+		{
+			grid = new CustomGrid(gridWidth, gridHeight, gridPosition, cellSize);
+		}
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
@@ -43,10 +48,6 @@ namespace Pathfinding
 			}
 		}
 
-		private void InitializeGrid()
-		{
-			grid = new CustomGrid(gridWidth, gridHeight, gridPosition, cellSize);
-		}
 
 		private void OnDrawGizmos()
 		{

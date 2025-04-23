@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Pathfinding;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ using UnityEngine;
 [RequireComponent(typeof(UnitPathfinding))]
 public class StandartUnitController : UnitController<BaseUnitDynamicData>
 {
-
 	private UIManager _uiManager => UIManager.Instance;
 	protected override void Start()
 	{
@@ -23,7 +23,7 @@ public class StandartUnitController : UnitController<BaseUnitDynamicData>
 
 	public override void Attack(IDamageable target)
 	{
-
+		
 		MoveTo(target.Position);
 		AddCommand(new AttackState(this, target));
 	}
@@ -31,10 +31,17 @@ public class StandartUnitController : UnitController<BaseUnitDynamicData>
 	public override void TakeDamage(float damage)
 	{
 		m_dynamicData.Health -= damage;
+		PlayDamageAnimation();
 		if (m_dynamicData.Health <= 0)
 		{
 			Destroy(gameObject);
 		}
+	}
+	private void PlayDamageAnimation()
+	{
+		Sequence damageSequence = DOTween.Sequence();
+		damageSequence.Append(transform.DOShakePosition(0.3f, 0.1f)) 
+					  .Join(selectionRenderer?.DOColor(Color.red, 0.1f).SetLoops(2, LoopType.Yoyo)); 
 	}
 
 	public override void MoveTo(Vector2 targetPosition)
@@ -45,10 +52,12 @@ public class StandartUnitController : UnitController<BaseUnitDynamicData>
 
 	public override void OnSelected()
 	{
+		base.OnSelected();
 		_uiManager?.OpenUnitPanel(UnitType, m_dynamicData);
 	}
 	public override void OnDeselected()
 	{
+		base.OnDeselected();
 		_uiManager?.HideController();
 	}
 }

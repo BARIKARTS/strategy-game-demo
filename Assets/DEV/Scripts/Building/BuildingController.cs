@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -19,10 +20,16 @@ public abstract class BuildingController<T2> : BaseBuildingController where T2 :
 	public override void TakeDamage(float damage)
 	{
 		m_dynamicData.Health -= damage;
+		PlayDamageAnimation();
 		if (m_dynamicData.Health <= 0)
 		{
 			Destroy();
 		}
 	}
-
+	private void PlayDamageAnimation()
+	{
+		Sequence damageSequence = DOTween.Sequence();
+		damageSequence.Append(transform.DOShakePosition(0.3f, 0.1f))
+					  .Join(selectionRenderer?.DOColor(Color.red, 0.1f).SetLoops(2, LoopType.Yoyo));
+	}
 }

@@ -22,5 +22,5 @@ MonoBehaviour:
       _health: 10
       _damage: 0.25
       _speed: 8
-      _attackDistance: 10
+      _attackDistance: 8
       _attackCooldown: 2
