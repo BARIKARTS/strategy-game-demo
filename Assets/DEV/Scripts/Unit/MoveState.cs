@@ -1,12 +1,14 @@
 using UnityEngine;
 
+/// <summary>
+/// Manages unit movement state
+/// </summary>
 public class MoveState : BaseUnitState
 {
 	private bool _onComplate = false;
-	public MoveState(BaseUnitController controller, Vector2 targetPosition) : base(controller)
+	public MoveState(BaseUnitController controller, Vector2 targetPosition, float speed) : base(controller)
 	{
-		//_moveSpeed = 5f;
-		controller.UnitPathfinding.GoMove(targetPosition, 5, 1f, Fnish);
+		controller.UnitPathfinding.GoMove(targetPosition, speed, 1f, Fnish);
 	}
 	private void Fnish()
 	{
@@ -16,5 +18,9 @@ public class MoveState : BaseUnitState
 	{
 	}
 
+	/// <summary>
+	/// Checks if movement is finished
+	/// </summary>
+	/// <returns>status</returns>
 	public override bool IsFinished() => _onComplate;
 }

@@ -63,9 +63,10 @@ namespace Pathfinding
 		/// <param name="onComplate">Optional callback to invoke when the target is reached.</param>
 		public void SetTarget(Vector2 targetPos, UnityAction onComplate = null)
 		{
+			if (transform == null) return;
 			ClearValues();
 			if (onComplate != null) _onComplate.AddListener(onComplate);
-			Queue<Vector2> pahtPositions = _pathfindingManager.FindPath(transform.position, targetPos);
+			 Queue<Vector2> pahtPositions = _pathfindingManager.FindPath(transform.position, targetPos);
 			if (pahtPositions != null && pahtPositions.Count > 0)
 			{
 				path = pahtPositions.ToArray();

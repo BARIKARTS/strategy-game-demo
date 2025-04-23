@@ -30,23 +30,17 @@ public class StandartUnitController : UnitController<BaseUnitDynamicData>
 
 	public override void TakeDamage(float damage)
 	{
-		Debug.Log(m_dynamicData.Healt);
-		m_dynamicData.Healt -= damage;
-		Debug.Log(m_dynamicData.Healt);
-		if (m_dynamicData.Healt <= 0)
+		m_dynamicData.Health -= damage;
+		if (m_dynamicData.Health <= 0)
 		{
 			Destroy(gameObject);
 		}
 	}
-	/// <summary>
-	/// Moves the unit to the specified target position.
-	/// Clears existing commands and queues a new movement command.
-	/// </summary>
-	/// <param name="targetPosition">The position to move towards.</param>
+
 	public override void MoveTo(Vector2 targetPosition)
 	{
 		AllClearStates();
-		AddCommand(new MoveState(this, targetPosition));
+		AddCommand(new MoveState(this, targetPosition,m_dynamicData.Speed));
 	}
 
 	public override void OnSelected()

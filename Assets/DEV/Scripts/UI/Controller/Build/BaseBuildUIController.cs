@@ -12,9 +12,8 @@ public abstract class BaseBuildUIController<T1, T2> : PanelController<T1, T2> wh
 	[Header("MAIN REFERENCES")]
 	[SerializeField] protected TextMeshProUGUI _name;
 	[SerializeField] protected TextMeshProUGUI _description;
-	[SerializeField] protected TextMeshProUGUI _healtText;
 	[SerializeField] protected Image _previewIcon;
-
+	protected BuildingType _currentType;
 	/// <summary>
 	/// Activates the UI panel with the specified static and dynamic building data.
 	/// Sets the name, description, icon, and subscribes to dynamic data events.
@@ -23,17 +22,18 @@ public abstract class BaseBuildUIController<T1, T2> : PanelController<T1, T2> wh
 	/// <param name="dynamicData">The dynamic building data to track.</param>
 	public override void Active(T1 data, T2 dynamicData)
 	{
+		_currentType = data.BuildingType;
 		_name.text = data.Name;
 		_description.text = data.Description;
 		_previewIcon.sprite = data.Icon;
-		m_dynamicData = (T2)dynamicData;
+		m_dynamicData = dynamicData;
 		Subscribe();
 		DynamicDataUpdate();
 		gameObject.SetActive(true);
 	}
 
 
-
+	
 	public override void Deactive()
 	{
 		gameObject.SetActive(false);
@@ -41,23 +41,24 @@ public abstract class BaseBuildUIController<T1, T2> : PanelController<T1, T2> wh
 	}
 	protected override void Subscribe()
 	{
+		if(m_dynamicData != null)
+		{
+
 		m_dynamicData.OnDataChange += DynamicDataUpdate;
 		m_dynamicData.OnDestroy += DestroyBuilding;
+		}
 	}
 
 	protected override void Unsubscribe()
 	{
-		m_dynamicData.OnDataChange -= DynamicDataUpdate;
-		m_dynamicData.OnDestroy -= DestroyBuilding;
-	}
-
-	protected virtual void DynamicDataUpdate()
-	{
 		if (m_dynamicData != null)
 		{
-			_healtText.text = $"{m_dynamicData.Healt}";
+			m_dynamicData.OnDataChange -= DynamicDataUpdate;
+			m_dynamicData.OnDestroy -= DestroyBuilding;
 		}
 	}
+
+	protected abstract void DynamicDataUpdate();
 	protected virtual void DestroyBuilding()
 	{
 		Deactive();

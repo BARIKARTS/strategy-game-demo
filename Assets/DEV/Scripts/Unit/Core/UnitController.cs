@@ -15,7 +15,7 @@ public abstract class UnitController<T2> : BaseUnitController where T2 : BaseUni
 		{
 			if (m_dynamicData != null)
 			{
-				return m_dynamicData.Healt;
+				return m_dynamicData.Health;
 			}
 			Debug.LogError($"{nameof(m_dynamicData)} is null");
 			return 0;

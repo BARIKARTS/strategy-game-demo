@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu(menuName = "Building/Barracks", fileName = "New Barracks Item")]
-public class BarracksScriptable : BaseBuildingScriptableObject
+public class BarracksScriptable : BaseBuildingSO
 {
 	[field: SerializeField] public BarracksData BarracksData { get; private set; }
 

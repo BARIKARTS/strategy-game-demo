@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 public class BuildingSpawner
 {
 	private List<BaseBuildingSpawner> _baseUnitSpawners = new List<BaseBuildingSpawner>();
 	private CommonData _commonData => CommonData.Instance;
 	private Dictionary<BuildingType, Type> _unitTypes => new Dictionary<BuildingType, Type>
 	{
-		{BuildingType.Barracks,typeof(BarracksSpawner) },
-		{BuildingType.PowerPlant,typeof(PowerPlantSpawner) }
+		{BuildingType.Cemetery,typeof(BarracksSpawner) },
+		{BuildingType.PowerPlant,typeof(PowerPlantSpawner) },
+		{BuildingType.DevilsHut,typeof(BarracksSpawner) }
 	};
 
 	public BuildingSpawner()

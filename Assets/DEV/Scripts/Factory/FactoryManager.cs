@@ -1,13 +1,16 @@
 using Pathfinding;
 using UnityEngine;
 
+/// <summary>
+/// Manages unit and building spawning
+/// </summary>
 public class FactoryManager : SingletonMonoBehaviour<FactoryManager>
 {
 	private UnitSpawner _unitSpawner;
 	private BuildingSpawner _buildingSpawner;
 
 	private AstarPathfindingManager _pathfindingManager => AstarPathfindingManager.Instance;
-	private void Start()
+	public void Initialize()
 	{
 		CreateSpawners();
 	}
@@ -19,25 +22,17 @@ public class FactoryManager : SingletonMonoBehaviour<FactoryManager>
 
 	}
 
-	public void BuildingSpawn(BuildingType buildingType, Vector2 position)
+	public GameObject BuildingSpawn(BuildingType buildingType, Vector2 position)
 	{
 		GameObject building = _buildingSpawner.Spawn(buildingType, position);
 		if (building != null) _pathfindingManager.PlaceStructure(building);
+		return building;
 	}
 
-	public void UnitSpawn(UnitType unitType, Vector2 position)
+	public GameObject UnitSpawn(UnitType unitType, Vector2 position)
 	{
-		_unitSpawner.Spawn(unitType, position);
-	}
-
-	[ContextMenu("TestUnitSpawn")]
-	private void TestUnitSpawn()
-	{
-	}
-	[ContextMenu("TestBuildingSpawn")]
-	private void TestBuildingSpawn()
-	{
-		_buildingSpawner.Spawn(BuildingType.Barracks, Vector2.zero);
+		GameObject unit = _unitSpawner.Spawn(unitType, position);
+		return unit;
 	}
 
 }

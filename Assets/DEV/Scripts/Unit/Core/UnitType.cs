@@ -3,7 +3,13 @@
 /// </summary>
 public enum UnitType
 {
-	Solider1 = 0,
-	Solider2 = 1,
-	Soldier3 = 3
+	None,
+	Clown,
+	Crossbone,
+	Devil,
+	Ghost,
+	Goblin,
+	Ogre,
+	Skull,
+	Zombie
 }

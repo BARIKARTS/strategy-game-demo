@@ -4,8 +4,10 @@ using UnityEngine;
 [Serializable]
 public class BaseUnitDynamicData
 {
-	[SerializeField] private float _healt;
+	[SerializeField] private float _health;
 	[SerializeField] private float _damage;
+	[SerializeField] private float _speed;
+	[SerializeField] private float _attackDistance;
 	[SerializeField] private float _attackCooldown;
 	public float Damage
 	{
@@ -19,20 +21,27 @@ public class BaseUnitDynamicData
 			DataChange();
 		}
 	}
-
-	public float Healt
+	public float Health
 	{
 		get
 		{
-			return _healt;
+			return _health;
 		}
 		set
 		{
-			_healt = value;
+			_health = value;
 			DataChange();
 		}
 	}
-
+	public float AttackDistance
+	{
+		get { return _attackDistance; }
+		set
+		{
+			_attackDistance = value;
+			DataChange();
+		}
+	}
 	public float AttackCooldown
 	{
 		get
@@ -45,14 +54,27 @@ public class BaseUnitDynamicData
 			DataChange();
 		}
 	}
+
+	public float Speed
+	{
+		get { return _speed; }
+		set
+		{
+			_speed = value;
+			DataChange();
+		}
+	}
+
 	public Action OnDataChange;
 	public Action OnDestroy;
 
 	public BaseUnitDynamicData(BaseUnitDynamicData baseUnitDynamicData)
 	{
-		_healt = baseUnitDynamicData.Healt;
+		_health = baseUnitDynamicData.Health;
 		_damage = baseUnitDynamicData.Damage;
+		_attackDistance = baseUnitDynamicData.AttackDistance;
 		_attackCooldown = baseUnitDynamicData.AttackCooldown;
+		_speed = baseUnitDynamicData.Speed;
 		OnDataChange = delegate { };
 		OnDestroy = delegate { };
 

@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace GameInput
 {
+	/// <summary>
+	/// Manages input actions singleton
+	/// </summary>
 	public partial class InputActions
 	{
 		private static InputActions _instance;

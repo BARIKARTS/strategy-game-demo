@@ -15,7 +15,14 @@ public class UnitSpawner
 	/// </summary>
 	private Dictionary<UnitType, Type> _unitTypes => new Dictionary<UnitType, Type>
 	{
-		{UnitType.Solider1,typeof(SoldierFactory) }
+		{UnitType.Clown,typeof(SoldierSpawner) },
+		{UnitType.Crossbone,typeof(SoldierSpawner) },
+		{UnitType.Devil,typeof(SoldierSpawner) },
+		{UnitType.Ghost,typeof(SoldierSpawner) },
+		{UnitType.Goblin,typeof(SoldierSpawner) },
+		{UnitType.Ogre,typeof(SoldierSpawner) },
+		{UnitType.Skull,typeof(SoldierSpawner) },
+		{UnitType.Zombie,typeof(SoldierSpawner) },
 	};
 
 	public UnitSpawner()
@@ -40,7 +47,8 @@ public class UnitSpawner
 		{
 			if (_commonData.TryGetUnitData(unitType, out BaseUnitData data))
 			{
-				BaseUnitSpawner spawner = (BaseUnitSpawner)Activator.CreateInstance(type, args: data);
+				BaseUnitSpawner spawner = (BaseUnitSpawner)Activator.CreateInstance(type);
+				spawner.Initialize(data);
 				_baseUnitSpawners.Add(spawner);
 			}
 		}
@@ -51,16 +59,17 @@ public class UnitSpawner
 	/// </summary>
 	/// <param name="unitType">the type of soldier desired to be produced</param>
 	/// <param name="position">spawn position</param>
-	public void Spawn(UnitType unitType, Vector2 position)
+	public GameObject Spawn(UnitType unitType, Vector2 position)
 	{
-		BaseUnitSpawner spawner = _baseUnitSpawners.FirstOrDefault(s => s.Data?.UnitType == unitType);
+		BaseUnitSpawner spawner = _baseUnitSpawners.FirstOrDefault(s => s?.UnitType == unitType);
 		if (spawner != null)
 		{
-			spawner.Spawn(position, _commonData.Team);
+			return spawner.Spawn(position, _commonData.Team);
 		}
 		else
 		{
 			Debug.LogWarning($"{unitType} type spawner not found");
+			return null;
 		}
 	}
 }

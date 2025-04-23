@@ -4,18 +4,18 @@ using UnityEngine;
 [Serializable]
 public class BaseBuildingDynamicData
 {
-	[SerializeField] private float _healt = 0;
+	[SerializeField] private float _health = 0;
 
-	public float Healt
+	public float Health
 	{
 		get
 		{
-			return _healt;
+			return _health;
 		}
 		set
 		{
-			_healt = value;
-			if (_healt <= 0) OnDestroy?.Invoke();
+			_health = value;
+			if (_health <= 0) OnDestroy?.Invoke();
 			DataChange();
 		}
 	}
@@ -24,7 +24,7 @@ public class BaseBuildingDynamicData
 	public event Action OnDestroy;
 	public BaseBuildingDynamicData(BaseBuildingDynamicData defaultData)
 	{
-		_healt = defaultData.Healt;
+		_health = defaultData.Health;
 		OnDataChange = delegate { };
 		OnDestroy = delegate { };
 	}

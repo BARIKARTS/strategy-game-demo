@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <UnitData>k__BackingField:
     <Name>k__BackingField: Devil
-    <Description>k__BackingField: A soldier who strikes fear into his enemies
+    <Description>k__BackingField: A demon escaping from devil.
     <Icon>k__BackingField: {fileID: 21300000, guid: 469bd110329ae2f40a8414da9c5f2ed7, type: 3}
-    <Prefab>k__BackingField: {fileID: 6141244921227275281, guid: 03740d80e6b8af448a38beffa677f616, type: 3}
-    <UnitType>k__BackingField: 0
+    <Prefab>k__BackingField: {fileID: 8261126694669589129, guid: 03740d80e6b8af448a38beffa677f616, type: 3}
+    <UnitType>k__BackingField: 3
     DynamicData:
-      _healt: 50
-      _damage: 10
+      _health: 10
+      _damage: 8
+      _speed: 12
+      _attackDistance: 10
       _attackCooldown: 1

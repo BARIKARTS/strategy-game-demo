@@ -12,6 +12,7 @@ namespace BuildingSystem
 		[SerializeField] private Color _invalidPlacementColor;
 		[SerializeField] private Tilemap _baseTileMap;
 		[SerializeField] private PreviewLayer _previewLayer;
+		[SerializeField] private ContactFilter2D _contactFilter2D;
 
 		private Coroutine _coroutine;
 		private BuildingType _currentType;
@@ -55,36 +56,20 @@ namespace BuildingSystem
 			while (true)
 			{
 				mouseWorldPos = MouseUser.MouseInWorldPosition;
-				canBuild = CheckSurroundings();
+				canBuild = _previewLayer.CheckSurroundings();
 				previewColor = (canBuild ? _validPlacementColor : _invalidPlacementColor);
 				_previewLayer.UpdatePreview(mouseWorldPos, previewColor);
 				if (MouseUser.IsMouseButtonPressed(MouseButton.Left) && _activeBuildable != null && canBuild)
 				{
-					_factoryManager.BuildingSpawn(_currentType, mouseWorldPos);
+					_ = _factoryManager.BuildingSpawn(_currentType, mouseWorldPos);
 					Deactive();
-					//GameObject createObj = Instantiate(ActiveBuildable.Prefab, mouseWorldPos, Quaternion.identity);
-					//AstarPathfindingManager.Instance.PlaceStructure(createObj);
-					//BarracksData barracksData = new BarracksData();
-					//createObj.GetComponent<BarracksController>().Initialize(new BarracksData());
+
 				}
 				yield return null;
 			}
 		}
 
-		public bool CheckSurroundings()
-		{
 
-			Vector2 spriteSize = _activeBuildable.PreviewSprite.bounds.size;
-
-			Vector2 boxSize = spriteSize;
-
-			Vector2 boxCenter = _previewLayer.transform.position + _activeBuildable.PreviewSprite.bounds.center;
-			int layerToIgnore = LayerMask.NameToLayer("TileMap");
-			int mask = ~(1 << layerToIgnore);
-			Collider2D hit = Physics2D.OverlapBox(boxCenter, boxSize, 10f, mask);
-
-			return hit == null;
-		}
 
 
 	}

@@ -9,15 +9,28 @@ public abstract class BaseUnitSpawner
 	/// <summary>
 	/// Gets the unit data associated with the spawner.
 	/// </summary>
-	public BaseUnitData Data { get; private set; }
+	protected BaseUnitData m_data { get; private set; }
+
+	public UnitType UnitType
+	{
+		get
+		{
+			if(m_data != null)
+			{
+				return m_data.UnitType;
+			}
+			return UnitType.None;
+		}
+	}
+
 
 	/// <summary>
 	/// Initializes a new instance of the BaseUnitSpawner with the specified unit data.
 	/// </summary>
 	/// <param name="unitData">The unit data used for spawning units.</param>
-	protected BaseUnitSpawner(BaseUnitData unitData)
+	public virtual void Initialize(BaseUnitData unitData)
 	{
-		Data = unitData;
+		m_data = unitData;
 	}
 	/// <summary>
 	/// Spawns a unit at the specified position with the given team.

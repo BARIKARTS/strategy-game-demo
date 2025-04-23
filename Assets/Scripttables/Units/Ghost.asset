@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb3a784f3d026640b67f6e945fe7d33, type: 3}
+  m_Name: Ghost
+  m_EditorClassIdentifier: 
+  <UnitData>k__BackingField:
+    <Name>k__BackingField: Ghost
+    <Description>k__BackingField: A powerless ghost. He thinks he's scary
+    <Icon>k__BackingField: {fileID: 21300000, guid: 184fc91a81bdd064cbe3809e7500ce82, type: 3}
+    <Prefab>k__BackingField: {fileID: 2242607205695228534, guid: 74e8dcfdd1e17f64a8a91bf4735af345, type: 3}
+    <UnitType>k__BackingField: 4
+    DynamicData:
+      _health: 10
+      _damage: 0.25
+      _speed: 8
+      _attackDistance: 10
+      _attackCooldown: 2

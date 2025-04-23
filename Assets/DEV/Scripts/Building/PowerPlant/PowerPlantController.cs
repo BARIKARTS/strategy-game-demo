@@ -1,10 +1,11 @@
-
-
 using Pathfinding;
 
-public class PowerPlantController : BuildingBaseController<PowerPlantDynamicData>
+/// <summary>
+/// Controls power plant building behavior
+/// </summary>
+public class PowerPlantController : BuildingController<PowerPlantDynamicData>
 {
-
+	
 	private AstarPathfindingManager _pathfindingManager => AstarPathfindingManager.Instance;
 	public override void OnSelected()
 	{
@@ -16,7 +17,6 @@ public class PowerPlantController : BuildingBaseController<PowerPlantDynamicData
 	{
 		base.OnDeselected();
 		UIManager.Instance.HideController();
-
 	}
 
 	public override void Destroy()

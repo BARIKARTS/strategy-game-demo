@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb3a784f3d026640b67f6e945fe7d33, type: 3}
+  m_Name: Skull
+  m_EditorClassIdentifier: 
+  <UnitData>k__BackingField:
+    <Name>k__BackingField: Skull
+    <Description>k__BackingField: Don't be fooled that it's just a skull. It really
+      is a skull :D
+    <Icon>k__BackingField: {fileID: 21300000, guid: 1441fd70e09e8094db70fa839dd15639, type: 3}
+    <Prefab>k__BackingField: {fileID: 2182910733573437073, guid: 86566b1148a6f5f488666850f7e3c3f8, type: 3}
+    <UnitType>k__BackingField: 7
+    DynamicData:
+      _health: 10
+      _damage: 3
+      _speed: 3
+      _attackDistance: 10
+      _attackCooldown: 0.5

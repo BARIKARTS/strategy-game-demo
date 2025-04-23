@@ -55,7 +55,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
 		if (_commonData.TryGetBuildingData(buildingType, out PowerPlantData powerPlantData))
 		{
-			_basePanelController = _barracksUIController;
+			_basePanelController = _powerPlantController;
 			_powerPlantController?.Active(powerPlantData, dynamicData);
 		}
 	}

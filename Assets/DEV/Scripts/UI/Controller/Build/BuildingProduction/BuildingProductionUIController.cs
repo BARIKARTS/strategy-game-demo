@@ -1,6 +1,9 @@
 using BuildingSystem;
 using UnityEngine;
 
+/// <summary>
+/// Manages UI for building production
+/// </summary>
 public class BuildingProductionUIController : MonoBehaviour
 {
 	[SerializeField] private ProductionUIElemet _productionPref;

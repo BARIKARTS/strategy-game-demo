@@ -1,26 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Spawns power plant buildings
+/// </summary>
 public class PowerPlantSpawner : BaseBuildingSpawner
 {
-	private PowerPlantData _data;
-	public override BuildingType BuildingType => _data.BuildingType;
-	public override void Initialize(BaseBuildingData unitData)
-	{
-		_data = (PowerPlantData)unitData;
-	}
+	private PowerPlantData _data;//Stores power plant data
 
+	public override void Initialize(BaseBuildingData buildingData)
+	{
+		base.Initialize(buildingData);
+		if (buildingData != null && buildingData is PowerPlantData)
+		{
+			_data = (PowerPlantData)buildingData;
+		}else
+		{
+			Debug.LogWarning($"failed to initialize {nameof(PowerPlantSpawner)}");
+		}
+	}
 	public override GameObject Spawn(Vector2 position, byte team)
 	{
-		if (_data != null && _data.Prefab != null)
+		if (m_data != null && _data != null && m_data.Prefab != null)
 		{
-			GameObject createObj = GameObject.Instantiate(_data.Prefab);
+			GameObject createObj = GameObject.Instantiate(m_data.Prefab);
 			createObj.transform.position = position;
 			if (createObj.TryGetComponent(out PowerPlantController powerPlantController))
 			{
 
-				powerPlantController.Initialize(_data.BuildingType, team, _data.DynamicData);
+				powerPlantController.Initialize(m_data.BuildingType, team, _data.DynamicData);
 			}
 			else
 			{

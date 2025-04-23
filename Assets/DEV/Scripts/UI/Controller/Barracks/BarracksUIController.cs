@@ -9,8 +9,10 @@ public class BarracksUIController : BaseBuildUIController<BarracksData, Barracks
 	[Space(2), Header("PRODUCTION REFERENCE")]
 	[SerializeField] private ProductionUIElemet _productionPrefab;
 	[SerializeField] private RectTransform _productionParent;
+	[SerializeField] private HealthDisplay _healthDisplay;
 
-	ObjectPool<ProductionUIElemet> _productionPool;
+	private float _maxHealth;
+	private ObjectPool<ProductionUIElemet> _productionPool;
 	private List<ProductionUIElemet> _activeProduction = new List<ProductionUIElemet>();
 	private CommonData _commonData => CommonData.Instance;
 	private FactoryManager _factoryManager => FactoryManager.Instance;
@@ -22,8 +24,9 @@ public class BarracksUIController : BaseBuildUIController<BarracksData, Barracks
 	}
 	public override void Active(BarracksData data, BarracksDynamicData dynamicData)
 	{
+		_maxHealth = data.DynamicData.Health;
 		base.Active(data, dynamicData);
-		CreateProductionElements();
+		CreateProductionElements(data.BuildingType);
 	}
 	public override void Deactive()
 	{
@@ -38,9 +41,9 @@ public class BarracksUIController : BaseBuildUIController<BarracksData, Barracks
 	}
 
 
-	private void CreateProductionElements()
+	private void CreateProductionElements(BuildingType buildingType)
 	{
-		if (_commonData != null && _commonData.TryGetBuildingData(BuildingType.Barracks, out BarracksData barracksData))
+		if (_commonData != null && _commonData.TryGetBuildingData(buildingType, out BarracksData barracksData))
 		{
 			ProductionUIElemet currentElement;
 			if (barracksData != null && barracksData.Units != null)
@@ -50,11 +53,12 @@ public class BarracksUIController : BaseBuildUIController<BarracksData, Barracks
 				{
 					currentData = barracksData.Units[i1].GetData();
 					if (currentData == null) continue;
-					//CreatePructionElement();
 					currentElement = _productionPool.GetObject();
+					currentElement.transform.SetSiblingIndex(i1);
+					UnitType unitType = currentData.UnitType;
 					currentElement.Initialize(currentData.Name, currentData.Icon, () =>
 					{
-						_factoryManager?.UnitSpawn(currentData.UnitType, m_dynamicData.UnitSpawnPosititon);
+						_ = _factoryManager?.UnitSpawn(unitType, m_dynamicData.UnitSpawnPosititon);
 					});
 					_activeProduction.Add(currentElement);
 				}
@@ -66,10 +70,18 @@ public class BarracksUIController : BaseBuildUIController<BarracksData, Barracks
 	{
 		for (byte i1 = 0; i1 < _activeProduction.Count; ++i1)
 		{
+			_activeProduction[i1].Hide();
 			_productionPool.ReturnObject(_activeProduction[i1]);
 		}
 		_activeProduction.Clear();
 	}
 
+	protected override void DynamicDataUpdate()
+	{
+		if (m_dynamicData != null)
+		{
+			_healthDisplay.UpdateHealth(_maxHealth, m_dynamicData.Health);
+		}
+	}
 }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 /// Provides access to unit data and type for use in unit initialization.
 /// </summary>
 [CreateAssetMenu(menuName = "Units/New Standart Unit", fileName = "new StandartUnit")]
-public class StandartUnitSO : BaseUnitScriptableObject
+public class StandartUnitSO : BaseUnitSO
 {
 	[field: SerializeField] public StandartUnitData UnitData { get; private set; }
 	public override UnitType UnitType => UnitData.UnitType;

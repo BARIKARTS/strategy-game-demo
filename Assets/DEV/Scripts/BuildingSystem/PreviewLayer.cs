@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BuildingSystem
@@ -8,10 +9,15 @@ namespace BuildingSystem
 	/// </summary>
 	public class PreviewLayer : MonoBehaviour
 	{
+		[SerializeField] private ContactFilter2D _contactFilter;
+		private PolygonCollider2D _collider;
 		private SpriteRenderer _spriteRenderer;
+
+		private Collider2D[] _result = new Collider2D[10];
 		private void Start()
 		{
 			_spriteRenderer = GetComponent<SpriteRenderer>();
+			_collider = GetComponent<PolygonCollider2D>();
 		}
 
 		/// <summary>
@@ -24,6 +30,7 @@ namespace BuildingSystem
 			if (sprite != null)
 			{
 				_spriteRenderer.sprite = sprite;
+				UpdateCollider();
 				gameObject.SetActive(true);
 			}
 		}
@@ -46,6 +53,25 @@ namespace BuildingSystem
 		{
 			transform.position = worldPos;
 			_spriteRenderer.color = color;
+		}
+
+		public bool CheckSurroundings()
+		{
+			int count = _collider.OverlapCollider(_contactFilter, _result);
+			return count <= 0;
+		}
+		private void UpdateCollider()
+		{
+
+			_collider.pathCount = _spriteRenderer.sprite.GetPhysicsShapeCount();
+
+			List<Vector2> path = new List<Vector2>();
+			for (int i = 0; i < _collider.pathCount; i++)
+			{
+				path.Clear();
+				_spriteRenderer.sprite.GetPhysicsShape(i, path);
+				_collider.SetPath(i, path.ToArray());
+			}
 		}
 	}
 }

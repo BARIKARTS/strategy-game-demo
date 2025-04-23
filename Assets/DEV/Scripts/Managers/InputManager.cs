@@ -2,13 +2,21 @@ using GameInput;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Manages user input and interactions
+/// </summary>
 public class InputManager : MonoBehaviour
 {
 	private RuleManager _ruleManager;
-	private InteractionContext currentContext = new();
+	private InteractionContext currentContext;
+	private CommonData _commonData => CommonData.Instance;
 	private void Start()
 	{
 		_ruleManager = new RuleManager();
+		currentContext = new InteractionContext()
+		{
+			Team = _commonData.Team
+		};
 	}
 	private void OnEnable()
 	{
@@ -21,7 +29,9 @@ public class InputManager : MonoBehaviour
 		MouseUser.OnRightMouseDown -= InteracteableObject;
 	}
 
-
+	/// <summary>
+	/// Handles object selection with left mouse
+	/// </summary>
 	private void SelectObject()
 	{
 		if (MouseUser.CanMousePointerUI) return;
@@ -37,10 +47,14 @@ public class InputManager : MonoBehaviour
 				return;
 			}
 		}
-		currentContext.FirstSelected?.OnDeselected();
+		if (currentContext.FirstSelected != null)
+			currentContext.FirstSelected?.OnDeselected();
 		currentContext.FirstSelected = null;
 	}
 
+	/// <summary>
+	/// Handles interaction with right mouse
+	/// </summary>
 	private void InteracteableObject()
 	{
 		if (MouseUser.CanMousePointerUI) return;
@@ -56,7 +70,7 @@ public class InputManager : MonoBehaviour
 			}
 
 		}
-		//Debug.Log("3");
+		currentContext?.FirstSelected?.OnDeselected();
 	}
 	void Update()
 	{
@@ -64,7 +78,10 @@ public class InputManager : MonoBehaviour
 	}
 
 
-
+	/// <summary>
+	/// Gets objects at mouse position
+	/// </summary>
+	/// <returns>Objects</returns>
 	private GameObject[] GetClickedGameObject()
 	{
 		Vector2 mouseWorldPos = MouseUser.MouseInWorldPosition;

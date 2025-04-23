@@ -8,12 +8,16 @@ public class UnitAttackEnemyRule : IRuleHandler
 {
 	public bool CanHandle(InteractionContext interactionContext)
 	{
+
 		return interactionContext?.FirstSelected is BaseUnitController && interactionContext?.SecondSelected is IDamageable;
+
+		//Teams are checked with consideration!
+		//return interactionContext?.FirstSelected is BaseUnitController controller && controller.Team == interactionContext.Team
+		//	&& interactionContext?.SecondSelected is IDamageable damageable && damageable.Team != interactionContext.Team;
 	}
 
 	public void Execute(InteractionContext interactionContext)
 	{
-		Debug.Log("Execute");
 		var unit = interactionContext.FirstSelected as BaseUnitController;
 		IDamageable damageable = interactionContext.SecondSelected as IDamageable;
 		unit.Attack(damageable);

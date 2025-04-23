@@ -8,7 +8,7 @@ using UnityEngine;
 public class BarracksData : BaseBuildingData
 {
 	[field: SerializeField] public BarracksDynamicData DynamicData { get; private set; }
-	[field: SerializeField] public BaseUnitScriptableObject[] Units;
+	[field: SerializeField] public BaseUnitSO[] Units;
 
 	public BaseUnitData[] GetAllUnitsData() => Units.Select(u=>u.GetData()).ToArray();
 

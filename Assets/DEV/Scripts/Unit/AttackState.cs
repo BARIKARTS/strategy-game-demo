@@ -13,11 +13,17 @@ public class AttackState : BaseUnitState
 
 	public override void Update()
 	{
-		Debug.Log($"update : {_dynamicData.AttackCooldown}");
 		if (target != null && target.Health > 0 && Time.time - lastAttackTime >= _dynamicData.AttackCooldown)
 		{
-			target.TakeDamage(_dynamicData.Damage);
-			lastAttackTime = Time.time;
+			if (Vector2.Distance(target.Position, m_controller.transform.position) <= _dynamicData.AttackDistance)
+			{
+				target.TakeDamage(_dynamicData.Damage);
+				lastAttackTime = Time.time;
+			}
+			else
+			{
+				m_controller.Attack(target);
+			}
 		}
 	}
 
